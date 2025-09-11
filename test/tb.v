@@ -56,8 +56,8 @@ module tb ();
 
     $display("========Reset========");
     data=0; str=0; ctrl=0; branch=0; fwrd=0; crct=0;
-    rst = 1; #20;
-    rst = 0;
+    rst_n = 0; #20;
+    rst_n = 1;
 
     $display("========Control hazard resolved CORRECTLY============");
     #10; ctrl=1; branch=1; crct=1;
