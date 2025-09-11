@@ -1,6 +1,6 @@
 # Tiny Tapeout project information
 project:
-  title:        "FSM based Pipeline Hazard Resolver in a RISC-V Processor"      # Project title
+  title:        "FSM based RISC-V Pipeline Hazard Resolver"      # Project title
   author:       "Pushkar R Kulkarni, Harsh Kumar, Manaswi, Tushar Masur, Dr. Shyalshree N, Ravish Aradhya H V, RV College of Engineering"      # Your name
   discord:      ""      # Your discord username, for communication and automatically assigning you a Tapeout role (optional)
   description:  "Pipeline Hazard Resolution in RISCV Processor through Finite State Machine"      # One line description of what your project does
@@ -23,19 +23,19 @@ project:
 # This section is for the datasheet/website. Use descriptive names (e.g., RX, TX, MOSI, SCL, SEG_A, etc.).
 pinout:
   # Inputs
-  ui[0]: "clk"
-  ui[1]: "rst"
-  ui[2]: "data"
-  ui[3]: "str"
-  ui[4]: "ctrl"
-  ui[5]: "branch"
-  ui[6]: "fwrd"
-  ui[7]: "crct"
+  ui[0]: ""
+  ui[1]: ""
+  ui[2]: "ui_in[[2]"
+  ui[3]: "ui_in[[3]"
+  ui[4]: "ui_in[[4]"
+  ui[5]: "ui_in[[5]"
+  ui[6]: "ui_in[[6]"
+  ui[7]: "ui_in[[7]"
 
   # Outputs
-  uo[0]: "pc_freeze"
-  uo[1]: "resolved"
-  uo[2]: "do_flush"
+  uo[0]: "uo_out[0]"
+  uo[1]: "uo_out[1]"
+  uo[2]: "uo_out[2]"
   uo[3]: ""
   uo[4]: ""
   uo[5]: ""
