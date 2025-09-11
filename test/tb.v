@@ -19,6 +19,9 @@ module tb ();
   wire [7:0] uo_out;
   wire [7:0] uio_out;
   wire [7:0] uio_oe;
+  wire VPWR = 1'b1;
+  wire VGND = 1'b0;
+
 
   // Clock generator: 10 ns period
   initial begin
@@ -29,8 +32,8 @@ module tb ();
   // Instantiate DUT with instance name 'user_project'
   tt_um_fsm_haz user_project (
 `ifdef GL_TEST
-    .VPWR(1'b1),
-    .VGND(1'b0),
+    .VPWR(VPWR),
+    .VGND(VGND),
 `endif
     .ui_in  (ui_in),
     .uo_out (uo_out),
