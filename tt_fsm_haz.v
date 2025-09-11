@@ -33,8 +33,7 @@
 
 module tt_fsm_haz(
     input  wire clk, rst, data, str, ctrl, branch, fwrd, crct,
-    output reg pc_freeze, resolved, do_flush,
-    output reg [2:0] state_out
+    output reg pc_freeze, resolved, do_flush
 );
 parameter Nor=3'b000, Con=3'b001, StaSin=3'b010, Flush=3'b011, Dat=3'b100, StaN=3'b101;
 reg [2:0] ps, ns;
@@ -123,7 +122,6 @@ always @(*) begin
     pc_freeze = 1'b0;
     do_flush  = 1'b0;
     resolved  = 1'b0;
-    state_out = ps;
     
         case (ps)
             Nor: begin
