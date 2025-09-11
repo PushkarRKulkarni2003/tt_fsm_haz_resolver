@@ -3,33 +3,25 @@
 
 module tb ();
 
-  // VCD dump
-  initial begin
-    $dumpfile("tb.vcd");
-    $dumpvars(0, tb);
-    #1;
-  end
+  reg clk;
+  reg rst_n;
+  reg data, str, ctrl, branch, fwrd, crct;
 
-  // Signals driven by TB
-  reg        clk;
-  reg        rst_n;
-  reg        ena;
-  reg  [7:0] ui_in;
-  reg  [7:0] uio_in;
+  // Wires to DUT
+  wire [7:0] ui_in;
   wire [7:0] uo_out;
   wire [7:0] uio_out;
   wire [7:0] uio_oe;
+
+  reg [7:0] uio_in;
+  reg ena;
   wire VPWR = 1'b1;
   wire VGND = 1'b0;
 
+  // Pack individual signals into ui_in (matching your RTL)
+  assign ui_in = {data, str, ctrl, branch, fwrd, crct, 1'b0, 1'b0};
 
-  // Clock generator: 10 ns period
-  initial begin
-    clk = 0;
-    forever #5 clk = ~clk;
-  end
-
-  // Instantiate DUT with instance name 'user_project'
+  // DUT instantiation
   tt_um_fsm_haz user_project (
 `ifdef GL_TEST
     .VPWR(VPWR),
@@ -42,79 +34,94 @@ module tb ();
     .uio_oe (uio_oe),
     .ena    (ena),
     .clk    (clk),
-    .rst_n  (rst_n)
+    .rst_n  (rst_n)   // active-low reset
   );
 
-  // Print outputs each clock for quick console check
-  always @(posedge clk) begin
-    $display("time=%0t ui_in=%b uo_out=%b (resolved=%b pc_freeze=%b do_flush=%b)",
-             $time, ui_in, uo_out, uo_out[7], uo_out[6], uo_out[5]);
+  // Clock
+  initial begin
+    clk = 0;
+    forever #5 clk = ~clk;  // 10ns period
   end
 
-  // Simple linear stimulus (no tasks)
+  // VCD dump
   initial begin
-    // init
-    ena    = 1'b1;
-    uio_in = 8'b0;
-    ui_in  = 8'b0;
-    rst_n  = 1'b0;
+    $dumpfile("tb.vcd");
+    $dumpvars(0, tb);
+  end
+  
+  // Stimulus sequence
+  initial begin
+    ena = 1;
+    uio_in = 8'h00;
 
-    // hold reset for a few clocks
-    repeat (3) @(posedge clk);
-    rst_n = 1'b1;
-    @(posedge clk);
+    $display("========Reset========");
+    data=0; str=0; ctrl=0; branch=0; fwrd=0; crct=0;
+    rst = 1; #20;
+    rst = 0;
 
-    // 1) Idle (Nor)
-    $display("--- Idle (Nor) ---");
-    ui_in = 8'b0000_0000;
-    repeat (3) @(posedge clk);
+    $display("========Control hazard resolved CORRECTLY============");
+    #10; ctrl=1; branch=1; crct=1;
+    #10; ctrl=0; branch=0; crct=1;
+    #30;
 
-    // 2) ctrl asserted -> Con (bit4)
-    $display("--- Assert ctrl (bit4) -> Con ---");
-    ui_in = 8'b0001_0000;
-    repeat (3) @(posedge clk);
+    $display("========Control hazard MIS-PREDICT (flush)===========");
+    #10; ctrl=1; branch=1; crct=0;
+    #20;
 
-    // 3) deassert ctrl -> Nor
-    $display("--- Deassert ctrl -> Nor ---");
-    ui_in = 8'b0000_0000;
-    repeat (3) @(posedge clk);
+    $display("========Control hazard delayed, mispredict later=======");
+    #10; ctrl=1; branch=0; crct=1;
+    #15; branch=1; crct=0;
+    #10; ctrl=0; branch=0; crct=1;
+    #30;
 
-    // 4) data asserted -> Dat (bit7)
-    $display("--- Assert data (bit7) -> Dat ---");
-    ui_in = 8'b1000_0000;
-    repeat (4) @(posedge clk);
+    $display("========Control hazard delayed, correct predict later======");
+    #10; ctrl=1; branch=0; crct=1;
+    #15; branch=1; crct=1;
+    #10; ctrl=0; branch=0; crct=1;
+    #30;
 
-    // 5) data + fwrd -> back to Nor (bit7 + bit3)
-    $display("--- Assert data + fwrd (bit3) -> should go Nor ---");
-    ui_in = 8'b1000_1000;
-    repeat (3) @(posedge clk);
+    $display("========Data hazard resolved by forwarding==========");
+    #10; data=1; fwrd=1;
+    #10; data=0; fwrd=0;
+    #30;
 
-    // 6) store (str bit6)
-    $display("--- Assert str (bit6) -> StaSin ---");
-    ui_in = 8'b0100_0000;
-    repeat (5) @(posedge clk);
+    $display("========Data hazard multi-cycle stall then cleared=======");
+    #10; data=1; fwrd=0;
+    #40; data=0;
+    #30;
 
-    // 7) branch & crct=0 -> Flush (branch bit4; crct bit2)
-    $display("--- branch & crct=0 -> Flush ---");
-    ui_in = 8'b0001_0100;
-    repeat (4) @(posedge clk);
+    $display("======== Structural hazard (single/multi-cycle)==========");
+    #10; str=1;
+    #20; str=0;
+    #30;
 
-    // 8) assert ctrl during flush
-    $display("--- Assert ctrl during flush ---");
-    ui_in = 8'b0001_0000;
-    repeat (3) @(posedge clk);
+    $display("========Priority tests==========");
+    $display("======== a) ctrl + data =========");
+    #10; ctrl=1; data=1; fwrd=0; str=0; branch=0; crct=1;
+    #30; branch=1; crct=1;
+    #10; branch=0; crct=1; ctrl=0; data=1;
+    #20; data=0;
 
-    // 9) a few random-ish vectors
-    $display("--- random-ish sequences ---");
-    ui_in = 8'b1101_1100; @(posedge clk);
-    ui_in = 8'b1101_1100; @(posedge clk);
-    ui_in = 8'b0010_0000; @(posedge clk);
-    ui_in = 8'b1000_0100; repeat (2) @(posedge clk);
+    $display("======== b) ctrl + str ===========");
+    #20; ctrl=1; str=1; data=0; fwrd=0; branch=0; crct=1;
+    #25; branch=1; crct=0;
+    #10; branch=0; crct=1; ctrl=0; str=1;
+    #20; str=0;
 
-    // Finish
+    $display("======== c) data + str ==========");
+    #20; data=1; str=1; fwrd=0; ctrl=0;
+    #30; data=0; str=0;
+    #30;
+
+    $display("======== 9) Preemption test: StaN interrupted by mispredict ===========");
+    #10; data=1; fwrd=0;
+    #15; ctrl=1; branch=1; crct=0;
+    #20;
+    #40;
+
     $display("---- TEST COMPLETE ----");
-    #10;
     $finish;
   end
 
 endmodule
+odule
