@@ -31,7 +31,7 @@
 
 `timescale 1ns / 1ps
 
-module tt_um_fsm_haz(
+module tt_fsm_haz(
     input  wire clk, rst, data, str, ctrl, branch, fwrd, crct,
     output reg pc_freeze, resolved, do_flush,
     output reg [2:0] state_out
