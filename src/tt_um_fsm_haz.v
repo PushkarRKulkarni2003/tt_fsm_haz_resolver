@@ -1,9 +1,8 @@
-
-`timescale 1ns / 1ps
 `default_nettype none
 `timescale 1ns / 1ps
+
 module tt_um_fsm_haz(
-     input  wire [7:0] ui_in,    // Dedicated inputs
+    input  wire [7:0] ui_in,    // Dedicated inputs
     output wire [7:0] uo_out,   // Dedicated outputs
     input  wire [7:0] uio_in,   // IOs: Input path
     output wire [7:0] uio_out,  // IOs: Output path
@@ -15,6 +14,7 @@ module tt_um_fsm_haz(
 
      wire data, str, ctrl, branch, fwrd, crct;
      reg pc_freeze, resolved, do_flush;
+     assign uio_oe = 8'b0;
 
      assign data = ui_in[7];
      assign str = ui_in[6];
