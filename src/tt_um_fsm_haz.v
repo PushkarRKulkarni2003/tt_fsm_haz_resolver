@@ -18,7 +18,7 @@ module tt_um_fsm_haz(
 
      assign data = ui_in[7];
      assign str = ui_in[6];
-     assign ctrl = ui_in[4];
+     assign ctrl = ui_in[5];
      assign branch = ui_in[4];
      assign fwrd = ui_in[3];
      assign crct = ui_in[2];
