@@ -1,9 +1,9 @@
 # Tiny Tapeout project information
 project:
-  title:        "fsm_haz"      # Project title
-  author:       "Dr. Shyalshree N, Harsh Kumar, Pushkar R Kulkarni"      # Your name
+  title:        "FSM based Pipeline Hazard Resolver in a RISC-V Processor"      # Project title
+  author:       "Pushkar R Kulkarni, Harsh Kumar, Dr. Shyalshree N, Ravish Aradhya H V, RV College of Engineering"      # Your name
   discord:      ""      # Your discord username, for communication and automatically assigning you a Tapeout role (optional)
-  description:  "Hazard detection in Pipeline through Finite State Machine"      # One line description of what your project does
+  description:  "Pipeline Hazard Resolution in RISCV Processor through Finite State Machine"      # One line description of what your project does
   language:     "Verilog" # other examples include SystemVerilog, Amaranth, VHDL, etc
   clock_hz:     10       # Clock frequency in Hz (or 0 if not applicable)
 
@@ -17,7 +17,7 @@ project:
   # Source files must be in ./src and you must list each source file separately, one per line.
   # Don't forget to also update `PROJECT_SOURCES` in test/Makefile.
   source_files:
-    - "tt_um_fsm_haz.v"
+    - "tt_fsm_haz.v"
 
 # The pinout of your project. Leave unused pins blank. DO NOT delete or add any pins.
 # This section is for the datasheet/website. Use descriptive names (e.g., RX, TX, MOSI, SCL, SEG_A, etc.).
