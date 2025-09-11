@@ -12,8 +12,24 @@ module tt_um_fsm_haz(
     input  wire       clk,      // clock
     input  wire       rst_n     // reset_n - low to reset
 );
-  wire clk, rst_n, data, str, ctrl, branch, fwrd, crct;
-    reg pc_freeze, resolved, do_flush;
+
+     wire data, str, ctrl, branch, fwrd, crct;
+     reg pc_freeze, resolved, do_flush;
+
+     assign data = ui_in[7];
+     assign str = ui_in[6];
+     assign ctrl = ui_in[4];
+     assign branch = ui_in[4];
+     assign fwrd = ui_in[3];
+     assign crct = ui_in[2];
+     
+     assign uo_out[4:0] = 5'b0;
+     assign uio_out = 8'b0;
+
+     wire _unused = &{ena};
+     
+
+     
 parameter Nor=3'b000, Con=3'b001, StaSin=3'b010, Flush=3'b011, Dat=3'b100, StaN=3'b101;
 reg [2:0] ps, ns;
     
@@ -129,4 +145,8 @@ always @(*) begin
         endcase
     end
 
+assign uo_out[7] = resolved;
+assign uo_out[6] = pc_freeze;
+assign uo_out[5] = do_flush;
+     
 endmodule
