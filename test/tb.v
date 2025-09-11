@@ -46,4 +46,46 @@ module tb ();
       .rst_n  (rst_n)     // not reset
   );
 
+  // Assign values to the wire type inout signals
+  assign ui_in = ui_in_reg;
+  assign uio_in = uio_in_reg;
+
+  initial begin
+    clk = 0;
+    forever #5 clk = ~clk;  
+  end
+
+  initial begin
+    rst_n = 0;  
+    ui_in_reg = 8'b11110010;
+    #10;
+    rst_n = 1;  
+    #10;
+    ui_in_reg = 8'b00010010; // 
+    #20; 
+    ui_in_reg = 8'b11110010; // 
+    #20; 
+    ui_in_reg = 8'b11110011; // 
+    #20;
+    ui_in_reg = 8'b11110010; // 
+    #20;
+    ui_in_reg = 8'b11101010; // 
+    #20;
+    ui_in_reg = 8'b11111010; // 
+    #20;
+    ui_in_reg = 8'b11111110; // 
+    #20;
+    ui_in_reg = 8'b11111010; // 
+
+    #20;
+    #10;
+    $stop;
+  end
+
+  initial begin
+    $monitor("Time=%0d | ui_in=%b, uio_out=%b | uo_out=%b", $time, ui_in, uio_out, uo_out);
+  end
+
+
+   
 endmodule
