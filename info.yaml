@@ -33,12 +33,12 @@ pinout:
   ui[7]: "crct"
 
   # Outputs
-  uo[0]: "state_out[0]"
-  uo[1]: "state_out[1]"
-  uo[2]: "state_out[2]"
-  uo[3]: "pc_freeze"
-  uo[4]: "resolved"
-  uo[5]: "do_flush"
+  uo[0]: "pc_freeze"
+  uo[1]: "resolved"
+  uo[2]: "do_flush"
+  uo[3]: ""
+  uo[4]: ""
+  uo[5]: ""
   uo[6]: ""
   uo[7]: ""
 
