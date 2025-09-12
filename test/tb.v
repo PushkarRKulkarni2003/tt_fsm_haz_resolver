@@ -51,6 +51,8 @@ module tb ();
   
   // Stimulus sequence
   initial begin
+    ena=1;
+    uio_in=8'h00;
     $display("========Reset========");
     data=0; str=0; ctrl=0; branch=0; fwrd=0; crct=0;
     rst_n = 0; #20;
