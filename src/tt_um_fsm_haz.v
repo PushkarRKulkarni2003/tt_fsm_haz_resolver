@@ -76,10 +76,10 @@ case (ps)
     StaSin: begin
         if (branch && !crct)
             ns = Flush;
-        else if(str^(!branch))
-            ns=StaSin;
+        else if((branch&&crct)||!str)
+            ns=Nor;
         else
-            ns = Nor; 
+            ns=StaSin; 
     end
 
     Flush: begin
@@ -90,13 +90,15 @@ case (ps)
     end
 
     Dat: begin
-        if (!data) 
-            ns = Nor;
-        else if (fwrd)
-            ns = Nor;
+        if(ctrl)
+            ns=Con;
+        else if (data) 
+            ns = Dat;
         else if (!fwrd && data)
             ns = StaN;
-        else
+        else if (fwrd && data)
+            ns = Nor;
+        else 
             ns = Nor;
             end
 
