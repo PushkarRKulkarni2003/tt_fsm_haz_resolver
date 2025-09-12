@@ -1,9 +1,9 @@
 # Tiny Tapeout project information
 project:
   title:        "FSM based RISC-V Pipeline Hazard Resolver"      # Project title
-  author:       "Pushkar R Kulkarni, Harsh Kumar, Manaswi, Tushar Masur, Dr. Shyalshree N, Ravish Aradhya H V, RV College of Engineering"      # Your name
+  author:       "Pushkar R Kulkarni, Harsh Kumar, Manaswi, Tushar Masur, Shyalshree N, RV College of Engineering, Bengaluru"      # Your name
   discord:      ""      # Your discord username, for communication and automatically assigning you a Tapeout role (optional)
-  description:  "Pipeline Hazard Resolution in RISCV Processor through Finite State Machine"      # One line description of what your project does
+  description:  "Design of Finite State Machine based Pipeline Hazard Resolution Unit for RISCV Processor"      # One line description of what your project does
   language:     "Verilog" # other examples include SystemVerilog, Amaranth, VHDL, etc
   clock_hz:     10       # Clock frequency in Hz (or 0 if not applicable)
 
